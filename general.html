@@ -1,0 +1,154 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>General code guidelines &mdash; NDN-CCL 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="NDN-CCL 0.1 documentation" href="index.html" />
+    <link rel="next" title="Recommendations for C++" href="cpp.html" />
+    <link rel="prev" title="Welcome to NDN-CCL’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="cpp.html" title="Recommendations for C++"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to NDN-CCL’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">NDN-CCL 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="general-code-guidelines">
+<h1>General code guidelines<a class="headerlink" href="#general-code-guidelines" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="type-class-function-method-and-variable-name-naming-convention">
+<h2>Type, class, function, method, and variable name naming convention<a class="headerlink" href="#type-class-function-method-and-variable-name-naming-convention" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Type and class names should follow the <strong>CamelCase</strong> convention: words are joined without spaces and are capitalized.
+Functions, methods, and variables should follow <strong>camelBack</strong> (differs from CamelCase by initial lowercase character!).</p>
+<p>The goal of the CamelCase and mixedCase conventions is to ensure that the words which make up a name can be separated by the eye: the initial Caps fills that role.</p>
+</li>
+<li><p class="first">Defined types may optionally end with a <tt class="docutils literal"><span class="pre">_t</span></tt>.</p>
+</li>
+<li><p class="first">For example, &#8220;key locator&#8221; is transformed into <strong>KeyLocator</strong> type, operation of getting key locator to <strong>getKeyLocator</strong> method, and variable storing key locator to <strong>keyLocator</strong>.</p>
+</li>
+<li><p class="first">Do not use all capital letters such as PEM or, DER, but choose instead Pem (pem) or Der (der).
+Do not use all capital letters, even for acronyms such as EDCA: use Edca (edca) instead.
+This applies also to two-letter acronyms, such as IP (which becomes Ip or ip).</p>
+</li>
+<li><p class="first">Defined constants (such as static const class members, or enum constants) will be all uppercase letters or numeric digits, with an underscore character separating words.</p>
+<p>Otherwise, the underscore character should not be used in a variable name.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="choosing-names">
+<h2>Choosing names<a class="headerlink" href="#choosing-names" title="Permalink to this headline">¶</a></h2>
+<p>Variable, function, method, and type names should be based on the English language, American spelling.
+Furthermore, always try to choose descriptive names for them.
+Types are often english names such as: Interest, Data, Key, or KeyLocator.
+Functions and methods are often named based on verbs and adjectives: getX, clearArray, etc.</p>
+<p>A long descriptive name which requires a lot of typing is always better than a short name which is hard to decipher.
+Do not use abbreviations in names unless the abbreviation is really unambiguous and obvious to everyone (e.g., use <tt class="docutils literal"><span class="pre">size</span></tt> over <tt class="docutils literal"><span class="pre">sz</span></tt>).
+Do not use short inappropriate names such as foo, bar, or baz.
+The name of an item should always match its purpose.
+As such, names such as <tt class="docutils literal"><span class="pre">tmp</span></tt> to identify a temporary variable or such as <tt class="docutils literal"><span class="pre">i</span></tt> to identify a loop index are ok.</p>
+<p>If you use predicates (that is, functions, variables or methods which return a single boolean value), prefix the name with <tt class="docutils literal"><span class="pre">is</span></tt> or <tt class="docutils literal"><span class="pre">has</span></tt>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">General code guidelines</a><ul>
+<li><a class="reference internal" href="#type-class-function-method-and-variable-name-naming-convention">Type, class, function, method, and variable name naming convention</a></li>
+<li><a class="reference internal" href="#choosing-names">Choosing names</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to NDN-CCL&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cpp.html"
+                        title="next chapter">Recommendations for C++</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/general.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="cpp.html" title="Recommendations for C++"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to NDN-CCL’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">NDN-CCL 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, NDN Project.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

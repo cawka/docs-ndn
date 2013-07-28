@@ -1,0 +1,229 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Recommendations for Python &mdash; NDN-CCL 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="NDN-CCL 0.1 documentation" href="index.html" />
+    <link rel="next" title="Recommendations for JavaScript" href="javascript.html" />
+    <link rel="prev" title="Recommendations for C++" href="cpp.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="javascript.html" title="Recommendations for JavaScript"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="cpp.html" title="Recommendations for C++"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">NDN-CCL 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="recommendations-for-python">
+<h1>Recommendations for Python<a class="headerlink" href="#recommendations-for-python" title="Permalink to this headline">¶</a></h1>
+<p>In addition to the <a class="reference internal" href="general.html"><em>general code guidelines</em></a> the following recommendations apply specifically for Python implementations.</p>
+<div class="section" id="filename-conventions">
+<h2>Filename conventions<a class="headerlink" href="#filename-conventions" title="Permalink to this headline">¶</a></h2>
+<p>File names should have all-lowercase names, matching to the implemented class.
+If class name is a composite of several words, each word in a file name should be separated with an underscore <tt class="docutils literal"><span class="pre">-</span></tt> character.
+For example, module implementing <tt class="docutils literal"><span class="pre">KeyLocator</span></tt> class should be named <tt class="docutils literal"><span class="pre">key_locator.py</span></tt>.</p>
+<p>Combining implementation of different (related) classes in the same module is highly discourabged, unless the secondary class implementation is relatively short.</p>
+<p>The goal of this naming pattern is to allow a reader to quickly navigate through the NDN-CCL codebase to locate the source file relevant to a specific type.
+Also, using lowercase names does not introduce unexpected errors for case insensitive filesystem.</p>
+</div>
+<div class="section" id="code-layout">
+<h2>Code layout<a class="headerlink" href="#code-layout" title="Permalink to this headline">¶</a></h2>
+<p>The code layout follows the GNU coding standard layout extended to Python.
+<strong>Do not use tabs for indentation</strong>.
+Indentation spacing is 4 spaces as outlined below:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">fooBar</span> <span class="p">(</span><span class="n">test</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">test</span><span class="p">:</span>
+        <span class="c"># do stuff here</span>
+        <span class="k">pass</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c"># do other stuff here</span>
+        <span class="k">pass</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">):</span>
+        <span class="c"># do loop</span>
+        <span class="k">pass</span>
+
+    <span class="k">while</span> <span class="n">test</span><span class="p">:</span>
+        <span class="c"># do while</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="file-layout-and-code-organization">
+<h2>File layout and code organization<a class="headerlink" href="#file-layout-and-code-organization" title="Permalink to this headline">¶</a></h2>
+<p>Each <tt class="docutils literal"><span class="pre">my_class.py</span></tt> module file should start with the following comments: the first line ensures that developers who use the emacs editor will be able to indent your code correctly.
+The following lines ensure that your code is licensed under the BSD, that the copyright holders are properly identified (typically, you or your employer), and that the actual author of the code is identified.
+If you are releasing the code under different license, adjust the header appropriately.
+The latter is purely informational and we use it to try to track the most appropriate person to review a patch or fix a bug.
+Please do not add the &#8220;All Rights Reserved&#8221; phrase after the copyright statement.</p>
+<p>Each module should contain docstring that briefly describes purpose of the module.
+Docstring may contain any information in reStructuredText format, which will be used for automated document generation.
+For more information about docstring, refer to <a class="reference external" href="http://www.python.org/dev/peps/pep-0257/">PEP 257 &#8211; Docstring Conventions</a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># -*- Mode:python; c-file-style:&quot;gnu&quot;; indent-tabs-mode:nil -*- */</span>
+<span class="c">#</span>
+<span class="c"># Copyright (c) YEAR COPYRIGHTHOLDER</span>
+<span class="c">#</span>
+<span class="c"># BSD license, See the LICENSE file for more information</span>
+<span class="c">#</span>
+<span class="c"># Author: MyName &lt;my@email&gt;</span>
+<span class="c">#</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Describe purpose of the module</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="comments">
+<h2>Comments<a class="headerlink" href="#comments" title="Permalink to this headline">¶</a></h2>
+<p>The project uses <a class="reference external" href="http://http://sphinx-doc.org/">Sphinx Documentation Generator to document the interfaces</a>, and uses docstring with reStructuredText content for improving the clarity of the code internally.
+All classes and public API methods should have docstring comments, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">MessageError</span> <span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for errors in the email package.&quot;&quot;&quot;</span>
+
+<span class="k">def</span> <span class="nf">myMethod</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">optional</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Do something</span>
+
+<span class="sd">    :param value: Value parameter</span>
+<span class="sd">    :type value: str</span>
+<span class="sd">    :param optional: Optional parameter</span>
+<span class="sd">    :type optional: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>All parameters and return values for public interface should be documented.</p>
+<p>As for comments within the code, comments should be used to describe intention or algorithmic overview where is it not immediately obvious from reading the code alone.
+There are no minimum comment requirements and small routines probably need no commenting at all, but it is hoped that many larger routines will have commenting to aid future maintainers.
+Please write complete English sentences and capitalize the first word unless a lower-case identifier begins the sentence.
+Two spaces after each sentence helps to make emacs sentence commands work.</p>
+<p>Variable declaration should have a short, one or two line comment describing the purpose of the variable, unless it is a local variable whose use is obvious from the context.
+The short comment should be on the same line as the variable declaration, unless it is too long, in which case it should be on the preceding lines.</p>
+</div>
+<div class="section" id="miscellaneous-items">
+<h2>Miscellaneous items<a class="headerlink" href="#miscellaneous-items" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">The following emacs mode line should be the first line in a file (or after the shebang line):</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="c"># -*- Mode:python; c-file-style:&quot;gnu&quot;; indent-tabs-mode:nil -*- */</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Use a space between the function name and the parentheses, e.g.:</p>
+<blockquote>
+<div><div class="highlight-c++"><pre>def mySub(var):     # avoid this
+    pass
+def mySub (var):    # use this instead
+    pass</pre>
+</div>
+<p>This spacing rule applies both to function declarations and invocations.</p>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Recommendations for Python</a><ul>
+<li><a class="reference internal" href="#filename-conventions">Filename conventions</a></li>
+<li><a class="reference internal" href="#code-layout">Code layout</a></li>
+<li><a class="reference internal" href="#file-layout-and-code-organization">File layout and code organization</a></li>
+<li><a class="reference internal" href="#comments">Comments</a></li>
+<li><a class="reference internal" href="#miscellaneous-items">Miscellaneous items</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="cpp.html"
+                        title="previous chapter">Recommendations for C++</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="javascript.html"
+                        title="next chapter">Recommendations for JavaScript</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/python.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="javascript.html" title="Recommendations for JavaScript"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="cpp.html" title="Recommendations for C++"
+             >previous</a> |</li>
+        <li><a href="index.html">NDN-CCL 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, NDN Project.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,394 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Recommendations for C++ &mdash; NDN-CCL 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="NDN-CCL 0.1 documentation" href="index.html" />
+    <link rel="next" title="Recommendations for Python" href="python.html" />
+    <link rel="prev" title="General code guidelines" href="general.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="python.html" title="Recommendations for Python"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="general.html" title="General code guidelines"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">NDN-CCL 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="recommendations-for-c">
+<h1>Recommendations for C++<a class="headerlink" href="#recommendations-for-c" title="Permalink to this headline">¶</a></h1>
+<p>In addition to the <a class="reference internal" href="general.html"><em>general code guidelines</em></a> the following recommendations apply specifically for C++ implementations.</p>
+<div class="section" id="filename-conventions">
+<h2>Filename conventions<a class="headerlink" href="#filename-conventions" title="Permalink to this headline">¶</a></h2>
+<p>File names should have all-lowercase names, matching to the implemented class.
+If class name is a composite of several words, each word in a file name should be separated with a <tt class="docutils literal"><span class="pre">-</span></tt>.
+For example, a header file that declares <tt class="docutils literal"><span class="pre">KeyLocator</span></tt> class should be named <tt class="docutils literal"><span class="pre">key-locator.h</span></tt> and the corresponding source file defining the class should be named <tt class="docutils literal"><span class="pre">key-locator.cc</span></tt>.</p>
+<p>Combining implementation of different (related) classes in the same header/source file is highly discourabged, unless the secondary class implementation is relatively short.</p>
+<p>The goal of this naming pattern is to allow a reader to quickly navigate through the NDN-CCL codebase to locate the source file relevant to a specific type.
+Also, using lowercase names does not introduce unexpected errors for case insensitive filesystem.</p>
+</div>
+<div class="section" id="code-layout">
+<h2>Code layout<a class="headerlink" href="#code-layout" title="Permalink to this headline">¶</a></h2>
+<p>The code layout follows the GNU coding standard layout for C and extends it to C++.
+<strong>Do not use tabs for indentation</strong>.
+Indentation spacing is 2 spaces (the default emacs C++ mode) as outlined below:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="kt">void</span>
+<span class="nf">fooBar</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">test</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="c1">// do stuff here</span>
+    <span class="p">}</span>
+  <span class="k">else</span>
+    <span class="p">{</span>
+      <span class="c1">// do other stuff here</span>
+    <span class="p">}</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="c1">// do loop</span>
+    <span class="p">}</span>
+
+  <span class="k">while</span> <span class="p">(</span><span class="n">test</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="c1">// do while</span>
+    <span class="p">}</span>
+
+  <span class="k">do</span>
+    <span class="p">{</span>
+      <span class="c1">// do stuff</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Each statement should be put on a separate line to increase readability, and multi-statement blocks following conditional or looping statements are always delimited by braces (single-statement blocks may be placed on the same line of an <tt class="docutils literal"><span class="pre">if</span> <span class="pre">()</span></tt> statement).
+Each variable declaration is on a separate line.
+Variables should be declared at the point in the code where they are needed, and should be assigned an initial value at the time of declaration.
+Except when used in a switch statement, the open and close braces <tt class="docutils literal"><span class="pre">{</span></tt> and <tt class="docutils literal"><span class="pre">}</span></tt> are always on a separate line. Do not use the C++ <tt class="docutils literal"><span class="pre">goto</span></tt> statement.</p>
+<p>The layout of variables declared in a class may either be aligned with the variable names or unaligned, as long as the file is internally consistent and no tab characters are included.
+Examples:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="kt">int</span> <span class="n">varOne</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">varTwo</span><span class="p">;</span>   <span class="c1">// OK (unaligned)</span>
+<span class="kt">int</span>      <span class="n">varOne</span><span class="p">;</span>
+<span class="kt">double</span>   <span class="n">varTwo</span><span class="p">;</span>  <span class="c1">// also OK (aligned)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="naming-convention-for-member-variables">
+<h2>Naming convention for member variables<a class="headerlink" href="#naming-convention-for-member-variables" title="Permalink to this headline">¶</a></h2>
+<p>Global variables should be prefixed with a <tt class="docutils literal"><span class="pre">g_</span></tt> and member variables should be prefixed with a <tt class="docutils literal"><span class="pre">m_</span></tt> (static member variables should be prefixed <tt class="docutils literal"><span class="pre">s_</span></tt>).
+The goal of that prefix is to give a reader a sense of where a variable of a given name is declared to allow the reader to locate the variable declaration and infer the variable type from that declaration.</p>
+<p>For example, you could declare in your class header <tt class="docutils literal"><span class="pre">my-class.h</span></tt>:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="k">typedef</span> <span class="kt">int</span> <span class="n">NewTypeOfInt_t</span><span class="p">;</span>
+<span class="k">const</span> <span class="kt">uint8_t</span> <span class="n">PORT_NUMBER</span> <span class="o">=</span> <span class="mi">17</span><span class="p">;</span>
+<span class="k">extern</span> <span class="kt">int</span> <span class="n">g_aGlobalVar</span><span class="p">;</span>
+
+<span class="k">class</span> <span class="nc">MyClass</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+  <span class="kt">void</span>
+  <span class="n">myMethod</span> <span class="p">(</span><span class="kt">int</span> <span class="n">aVar</span><span class="p">);</span>
+
+<span class="nl">private:</span>
+  <span class="kt">int</span> <span class="n">m_aVar</span><span class="p">;</span>
+  <span class="k">static</span> <span class="kt">int</span> <span class="n">s_anotherVar</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>and implement in your class file <tt class="docutils literal"><span class="pre">my-class.cc</span></tt>:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="k">static</span> <span class="kt">int</span> <span class="n">g_aStaticVar</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">g_aGlobalVar</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">MyClass</span><span class="o">::</span><span class="n">s_anotherVar</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+
+<span class="kt">void</span>
+<span class="n">MyClass</span><span class="o">::</span><span class="n">myMethod</span> <span class="p">(</span><span class="kt">int</span> <span class="n">aVar</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">m_aVar</span> <span class="o">=</span> <span class="n">aVar</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>As an exception to the above, the members of structures do not need to be prefixed with an <tt class="docutils literal"><span class="pre">m_</span></tt>.</p>
+<p>Finally, do not use Hungarian notation, and do not prefix enums, classes, or delegates with any letter.</p>
+</div>
+<div class="section" id="file-layout-and-code-organization">
+<h2>File layout and code organization<a class="headerlink" href="#file-layout-and-code-organization" title="Permalink to this headline">¶</a></h2>
+<p>Each <tt class="docutils literal"><span class="pre">my-class.h</span></tt> header should start with the following comments: the first line ensures that developers who use the emacs editor will be able to indent your code correctly.
+The following lines ensure that your code is licensed under the BSD, that the copyright holders are properly identified (typically, you or your employer), and that the actual author of the code is identified.
+If you are releasing the code under different license, adjust the header appropriately.
+The latter is purely informational and we use it to try to track the most appropriate person to review a patch or fix a bug.
+Please do not add the &#8220;All Rights Reserved&#8221; phrase after the copyright statement.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="cm">/* -*- Mode:C++; c-file-style:&quot;gnu&quot;; indent-tabs-mode:nil -*- */</span>
+<span class="cm">/*</span>
+<span class="cm"> * Copyright (c) YEAR COPYRIGHTHOLDER</span>
+<span class="cm"> *</span>
+<span class="cm"> * BSD license, See the LICENSE file for more information</span>
+<span class="cm"> *</span>
+<span class="cm"> * Author: MyName</span>
+<span class="cm"> */</span>
+</pre></div>
+</div>
+<p>Below these C-style comments, always include the following which defines a set of header guards (<tt class="docutils literal"><span class="pre">MY_CLASS_H</span></tt>) used to avoid multiple header includes and provide a set of doxygen comments for the public part of your class API.
+Detailed information on the set of tags available for doxygen documentation is described in the <a class="reference external" href="http:/doxygen.org">doxygen website</a>.</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="cm">/* -*- Mode:C++; c-file-style:&quot;gnu&quot;; indent-tabs-mode:nil -*- */</span>
+<span class="cm">/*</span>
+<span class="cm"> * Copyright (c) YEAR COPYRIGHTHOLDER</span>
+<span class="cm"> *</span>
+<span class="cm"> * BSD license, See the LICENSE file for more information</span>
+<span class="cm"> *</span>
+<span class="cm"> * Author: MyName</span>
+<span class="cm"> */</span>
+
+<span class="cp">#ifndef MY_CLASS_H</span>
+<span class="cp">#define MY_CLASS_H</span>
+
+<span class="cm">/**</span>
+<span class="cm"> * @brief Short one-line description of the purpose of your class</span>
+<span class="cm"> *</span>
+<span class="cm"> * A longer description of the purpose of your class after a blank</span>
+<span class="cm"> * empty line.</span>
+<span class="cm"> */</span>
+<span class="k">class</span> <span class="nc">MyClass</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+  <span class="n">MyClass</span> <span class="p">();</span>
+  <span class="cm">/**</span>
+<span class="cm">   * @brief Short one-line description of the purpose of the method</span>
+<span class="cm">   * @param firstParam a short description of the purpose of this parameter</span>
+<span class="cm">   * @returns a short description of what is returned from this function.</span>
+<span class="cm">   *</span>
+<span class="cm">   * A detailed description of the purpose of the method.</span>
+<span class="cm">   */</span>
+  <span class="kt">int</span>
+  <span class="nf">doSomething</span> <span class="p">(</span><span class="kt">int</span> <span class="n">firstParam</span><span class="p">);</span>
+
+<span class="nl">private:</span>
+  <span class="kt">void</span>
+  <span class="nf">myPrivateMethod</span> <span class="p">();</span>
+
+<span class="nl">private:</span>
+  <span class="kt">int</span> <span class="n">m_myPrivateMemberVariable</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="cp">#endif </span><span class="c1">// MY_CLASS_H</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">my-class.cc</span></tt> file is structured similarly:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="cm">/* -*- Mode:C++; c-file-style:&quot;gnu&quot;; indent-tabs-mode:nil -*- */</span>
+<span class="cm">/*</span>
+<span class="cm"> * Copyright (c) YEAR COPYRIGHTHOLDER</span>
+<span class="cm"> *</span>
+<span class="cm"> * BSD license, See the LICENSE file for more information</span>
+<span class="cm"> *</span>
+<span class="cm"> * Author: MyName &lt;my@email&gt;</span>
+<span class="cm"> */</span>
+<span class="cp">#include &quot;my-class.h&quot;</span>
+
+<span class="n">MyClass</span><span class="o">::</span><span class="n">MyClass</span> <span class="p">()</span>
+<span class="p">{</span>
+<span class="p">}</span>
+
+<span class="p">...</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="comments">
+<h2>Comments<a class="headerlink" href="#comments" title="Permalink to this headline">¶</a></h2>
+<p>The project uses <a class="reference external" href="http://doxygen.org">Doxygen to document the interfaces</a>, and uses comments for improving the clarity of the code internally.
+All public methods should have Doxygen comments.
+Doxygen comments should use the C comment style.
+For non-public methods, the <tt class="docutils literal"><span class="pre">&#64;internal</span></tt> tag should be used. Please use the <tt class="docutils literal"><span class="pre">&#64;see</span></tt> tag for cross-referencing.
+All parameters and return values for public interface should be documented.</p>
+<p>As for comments within the code, comments should be used to describe intention or algorithmic overview where is it not immediately obvious from reading the code alone.
+There are no minimum comment requirements and small routines probably need no commenting at all, but it is hoped that many larger routines will have commenting to aid future maintainers.
+Please write complete English sentences and capitalize the first word unless a lower-case identifier begins the sentence.
+Two spaces after each sentence helps to make emacs sentence commands work.
+Short one-line comments and long comments can use the C++ comment style; that is, &#8216;//&#8217;, but longer comments may use C-style comments:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="cm">/*</span>
+<span class="cm"> * A longer comment,</span>
+<span class="cm"> * with multiple lines.</span>
+<span class="cm"> */</span>
+</pre></div>
+</div>
+<p>Variable declaration should have a short, one or two line comment describing the purpose of the variable, unless it is a local variable whose use is obvious from the context.
+The short comment should be on the same line as the variable declaration, unless it is too long, in which case it should be on the preceding lines.</p>
+<p>Every function should be preceded by a detailed (Doxygen) comment block describing what the function does, what the formal parameters are, and what the return value is (if any).
+Either Doxygen style <tt class="docutils literal"><span class="pre">\</span></tt> or <tt class="docutils literal"><span class="pre">&#64;</span></tt> is permitted.  Every class declaration should be preceded by a (Doxygen) comment block describing what the class is to be used for.</p>
+</div>
+<div class="section" id="miscellaneous-items">
+<h2>Miscellaneous items<a class="headerlink" href="#miscellaneous-items" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">The following emacs mode line should be the first line in a file:</p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre><span class="cm">/* -*- Mode:C++; c-file-style:&quot;gnu&quot;; indent-tabs-mode:nil; -*- */</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Const reference syntax:</p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre><span class="kt">void</span> <span class="nf">mySub</span> <span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span><span class="p">);</span>    <span class="c1">// Method 1  (prefer this syntax)</span>
+<span class="kt">void</span> <span class="nf">mySub</span> <span class="p">(</span><span class="n">T</span> <span class="k">const</span><span class="o">&amp;</span><span class="p">);</span>    <span class="c1">// Method 2  (avoid this syntax)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Use a space between the function name and the parentheses, e.g.:</p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre><span class="kt">void</span> <span class="nf">mySub</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span><span class="p">);</span>     <span class="c1">// avoid this</span>
+<span class="kt">void</span> <span class="nf">mySub</span> <span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span><span class="p">);</span>    <span class="c1">// use this instead</span>
+</pre></div>
+</div>
+<p>This spacing rule applies both to function declarations and invocations.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Do not use <tt class="docutils literal"><span class="pre">nil</span></tt> or <tt class="docutils literal"><span class="pre">NULL</span></tt> constants; use <tt class="docutils literal"><span class="pre">0</span></tt> (improves portability)</p>
+<blockquote>
+<div><p>For C++11 code, use <tt class="docutils literal"><span class="pre">nullptr</span></tt> instead.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Consider whether you want the default copy constructor and assignment operator in your class, and if not, make them private such as follows:</p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre><span class="nl">private:</span>
+    <span class="n">ClassName</span> <span class="p">(</span><span class="k">const</span> <span class="n">Classname</span><span class="o">&amp;</span><span class="p">)</span> <span class="p">{</span> <span class="p">};</span>
+    <span class="n">ClassName</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span> <span class="p">(</span><span class="k">const</span> <span class="n">ClassName</span><span class="o">&amp;</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>For C++11 code, you can use the following instead:</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="n">ClassName</span> <span class="o">&amp;</span> <span class="k">operator</span> <span class="o">=</span> <span class="p">(</span><span class="k">const</span> <span class="n">ClassName</span> <span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+<span class="n">ClassName</span> <span class="p">(</span><span class="k">const</span> <span class="n">ClassName</span> <span class="o">&amp;</span><span class="p">)</span> <span class="o">=</span> <span class="k">delete</span><span class="p">;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Avoid returning a reference to an internal or local member of an object:</p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre><span class="n">a_type</span><span class="o">&amp;</span> <span class="n">foo</span> <span class="p">();</span>  <span class="c1">// should be avoided, return a pointer or an object.</span>
+<span class="k">const</span> <span class="n">a_type</span><span class="o">&amp;</span> <span class="n">foo</span> <span class="p">()</span> <span class="k">const</span><span class="p">;</span> <span class="c1">// same as above</span>
+</pre></div>
+</div>
+<p>This guidance does not apply to the use of references to implement operators.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Expose class members through access functions, rather than direct access to a public object. The access functions are typically named <tt class="docutils literal"><span class="pre">get</span></tt> and <tt class="docutils literal"><span class="pre">set</span></tt>. For example, a member <tt class="docutils literal"><span class="pre">m_delayTime</span></tt> might have accessor functions <tt class="docutils literal"><span class="pre">getDelayTime</span> <span class="pre">()</span></tt> and <tt class="docutils literal"><span class="pre">setDelayTime</span> <span class="pre">()</span></tt>.</p>
+</li>
+<li><p class="first">For standard headers, use the C++ style of inclusion, such as</p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre><span class="cp">#include &lt;cheader&gt;</span>
+</pre></div>
+</div>
+<p>instead of</p>
+<div class="highlight-c++"><div class="highlight"><pre><span class="cp">#include &lt;header.h&gt;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Do not bring the C++ standard library namespace into header files using the <tt class="docutils literal"><span class="pre">using</span></tt> directive; i.e., avoid <tt class="docutils literal"><span class="pre">using</span> <span class="pre">namespace</span> <span class="pre">std;</span></tt> in header files.  This restriction does not apply to source files (<tt class="docutils literal"><span class="pre">.cc</span></tt>).</p>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Recommendations for C++</a><ul>
+<li><a class="reference internal" href="#filename-conventions">Filename conventions</a></li>
+<li><a class="reference internal" href="#code-layout">Code layout</a></li>
+<li><a class="reference internal" href="#naming-convention-for-member-variables">Naming convention for member variables</a></li>
+<li><a class="reference internal" href="#file-layout-and-code-organization">File layout and code organization</a></li>
+<li><a class="reference internal" href="#comments">Comments</a></li>
+<li><a class="reference internal" href="#miscellaneous-items">Miscellaneous items</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="general.html"
+                        title="previous chapter">General code guidelines</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="python.html"
+                        title="next chapter">Recommendations for Python</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/cpp.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="python.html" title="Recommendations for Python"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="general.html" title="General code guidelines"
+             >previous</a> |</li>
+        <li><a href="index.html">NDN-CCL 0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, NDN Project.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
