@@ -20,6 +20,8 @@ The following recommendations are not strict rules and some of them are conflict
    python.rst
    javascript.rst
 
+   api.rst
+
 
 .. Indices and tables
 .. ==================

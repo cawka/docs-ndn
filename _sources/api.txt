@@ -1,0 +1,210 @@
+Propsed general API for NDN-CCL
+===============================
+
+The following describes a proposed API for NDN-CCL.
+The description uses an abstract python-like syntax and just gives a guideline for components, naming of the components, and naming of the components' method in the API.
+
+Base elements (fields)
+----------------------
+
+Blob
+~~~~
+
+.. class:: Blob
+
+    Generic class representing continuous memory region.  Equivalent to :py:class:`bytes` in python and almost equivalent to :cpp:class:`std::vector<char>` in C++.
+
+    In C++ in addition to standard :cpp:class:`std::vector<char>` interface, there could additional helpers to facilitate access to the underlying data:
+
+    .. method:: buf ()
+
+        Const and non-const versions to get pointer to the first byte
+
+    .. method:: toBlob ()
+
+        Create a copy of Blob in :cpp:class:`std::string`
+
+Name component
+~~~~~~~~~~~~~~
+
+.. class:: name.Component
+
+    Bases: :class:`Blob`
+
+    Specialized form of memory region that is used for name components.
+    In addition to being memory, this component implements the appropriate ordering (e.g., canonical ordering in CCNx sense or any other ordering that we define later).
+    In case name component 
+
+    :Constructors:
+
+    .. method:: __init__ (self, value = None)
+
+        Potentially overloaded constructor taking zero or one argument: 
+
+        - If value is None (no arguments), an empty name component is created.
+        - If value is :py:class:`string`, :py:class:`bytes`, or another :py:class:`name.Component`, a new name component will be created, containing a copy of the supplied data
+
+        C++ can also have forms of 2 argument constructor:
+
+        - ``(const void *buf, size_t length)``: create from a memory buffer
+        - ``(const_iterator begin, const_iterator end)``: templated version to create component from another container of bytes
+
+    .. classmethod:: fromUri (cls, uri)
+
+        Construct :py:class:`name.Component` from URI
+
+    .. classmethod:: fromNumber (cls, number)
+
+        Create network-ordered numeric component
+
+        Number is encoded and added in network order. Tail zero-bytes are not included.
+        For example, if the number is 1, then 1-byte binary blob will be added  0x01.
+        If the number is 256, then 2 binary blob will be added: 0x01 0x01
+  
+        If the number is zero, an empty component will be created
+
+    .. classmethod:: formNumberWithMarker (cls, number, marker)
+
+    .. classmethod:: fromSeqNum (cls, seqnum)
+
+    .. classmethod:: fromControlNum (cls, controlNum)
+
+    .. classmethod:: fromBlkId (cls, blkId)
+
+    .. classmethod:: fromVersion (cls, version)
+
+    :Accessors:
+
+    The stored data should be directly accessible via :py:class:`Blob` interface.
+
+    .. method:: toUri (self)
+
+        Another variant in C++ ``toUri (std::ostream &os)``
+
+        There should also be a language-specific of this method to convert name component to URI.
+        For example, in python it is :py:meth:`str` method and in C++ it is ``operator<<(ostream &,const Component&)``.
+
+    .. method:: toNumber (self)
+
+    .. method:: toNumberWithMarker (self)
+
+    .. method:: toSeqNum (self)
+
+    .. method:: toControlNum (self)
+
+    .. method:: toBlkId (self)
+
+    .. method:: toVersion (self)
+
+    .. method:: compare (self, other)
+
+        Implementation of appropriate ordering
+
+        If possible, name.Component need to overload ``==``, ``<=``, ``<``, ``>=``, and ``>`` operations
+
+Name
+~~~~
+
+.. class:: Name
+
+    Bases: :class:`vector` or :class:`list`
+
+    NDN name abstraction
+
+    :Constructors:
+
+    .. method:: __init__ (self, value = None)
+
+        Potentially overloaded constructor taking zero or one argument: 
+
+        - If value is None (no arguments), an empty Name is created.
+        - If value is :py:class:`string`, equivalent to :py:meth:`Name.fromUri`
+        - If value is :py:class:`list` or another :py:class:`Name`, a new name will be created, containing a copy of the supplied data
+
+        C++ can also have forms of 2 argument constructor:
+
+        - ``(const_iterator begin, const_iterator end)``: templated version to create Name from another container (templated version)
+
+    .. classmethod:: fromUri (cls, uri)
+
+        Construct :py:class:`name.Component` from URI
+
+    :Modifiers:
+
+    .. method:: append (self, value)
+
+        Potentially overloaded method, taking one argumnet:
+
+        - if value is :py:class:`name.Component` or any other object "convertable" to name component, append this component to self and return self (to allow chaining)
+        - if value is :py:class:`Name` or any other object "convertable" to Name, append all name components to self and return self
+
+        C++ may have anoher method ``appendBySwap (name::Component &comp)`` to provide way for memory-optimized component appending.
+
+    .. method:: appendNumber (self, number)
+
+    .. method:: appendNumberWithMarker (self, number, marker)
+
+    .. method:: appendSeqNum (self, seqNum)
+
+    .. method:: appendControlNum (self, controlNum)
+
+    .. method:: appendBlkId (self, blkId)
+
+    .. method:: appendVersion (self, version)
+
+    :Accessors:
+
+    In addition to standard :class:`vector` or :class:`list` accessors
+
+    .. method:: toUri (self)
+
+        Another variant in C++ ``toUri (std::ostream &os)``
+
+        There should also be a language-specific of this method to convert name to URI.
+        For example, in python it is :py:meth:`str` method and in C++ it is ``operator<<(ostream &,const Name&)``.
+
+    .. method:: get (self, index)
+
+        Get binary blob of name component
+        
+        :type index: int
+        :param index: index of the name component.  If less than 0, then getting component from the back:
+                      get(-1) getting the last component, get(-2) is getting second component from back, etc.
+        :returns: :py:class:`Blob` of the requested name component
+  
+        If index is out of range, an exception will be thrown
+  
+        In C++ const and non-const versions
+
+
+    .. method:: getSubName (self, pos = 0, len = npos) # const
+
+        Get a new name, constructed as a subset of components
+
+        :type pos: int
+        :param pos: Position of the first component to be copied to the subname
+        :type len: int
+        :param len: Number of components to be copied. Value Name::npos indicates that all components till the end of the name.
+  
+    .. method:: getPrefix (self, len, skip)
+
+    .. method:: getPostfix (self, len, skip)
+
+    .. method:: isPrefixOf (self, name)
+
+    .. method:: compare (self, other)
+
+        Implementation of appropriate ordering
+
+        If possible, name.Component need to overload ``==``, ``<=``, ``<``, ``>=``, and ``>`` operations
+
+
+
+NDN primitives
+--------------
+
+.. class:: Interest
+
+.. class:: Data
+
+
