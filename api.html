@@ -241,6 +241,11 @@ For example, in python it is <tt class="xref py py-meth docutils literal"><span 
 <dd><p>Construct <a class="reference internal" href="#name.Component" title="name.Component"><tt class="xref py py-class docutils literal"><span class="pre">name.Component</span></tt></a> from URI</p>
 </dd></dl>
 
+<dl class="classmethod">
+<dt id="Name.fromWire">
+<em class="property">classmethod </em><tt class="descname">fromWire</tt><big>(</big><em>cls</em>, <em>buffer</em><big>)</big><a class="headerlink" href="#Name.fromWire" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -308,6 +313,11 @@ For example, in python it is <tt class="xref py py-meth docutils literal"><span 
 </dd></dl>
 
 <dl class="method">
+<dt id="Name.toWire">
+<tt class="descname">toWire</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Name.toWire" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="Name.get">
 <tt class="descname">get</tt><big>(</big><em>self</em>, <em>index</em><big>)</big><a class="headerlink" href="#Name.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get binary blob of name component</p>
@@ -327,8 +337,8 @@ get(-1) getting the last component, get(-2) is getting second component from bac
 </dd></dl>
 
 <dl class="method">
-<dt>
-<tt class="descname">getSubName (self, pos = 0, len = npos) # const</tt></dt>
+<dt id="Name.getSubName">
+<tt class="descname">getSubName</tt><big>(</big><em>self</em>, <em>pos = 0</em>, <em>len = npos</em><big>)</big><a class="headerlink" href="#Name.getSubName" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a new name, constructed as a subset of components</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -369,18 +379,1067 @@ get(-1) getting the last component, get(-2) is getting second component from bac
 </dd></dl>
 
 </div>
+<div class="section" id="exclude">
+<h3>Exclude<a class="headerlink" href="#exclude" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="Exclude">
+<em class="property">class </em><tt class="descname">Exclude</tt><a class="headerlink" href="#Exclude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exclude filter abstraction.</p>
+<p>The interface is ignorant about the underlying implementation (wire format) of the exclude filter, but the assumption is that we are using a simple form of exclude, with name components and <tt class="docutils literal"><span class="pre">&lt;ANY/&gt;</span></tt> tags to exclude ranges (no bloom filters).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Constructors :</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Exclude.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Exclude.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an empty exclude filter</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="Exclude.fromWire">
+<em class="property">classmethod </em><tt class="descname">fromWire</tt><big>(</big><em>cls</em>, <em>buffer</em><big>)</big><a class="headerlink" href="#Exclude.fromWire" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Modifiers :</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Exclude.excludeOne">
+<tt class="descname">excludeOne</tt><big>(</big><em>self</em>, <em>component</em><big>)</big><a class="headerlink" href="#Exclude.excludeOne" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exclude specific name component</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>component</strong> (<a class="reference internal" href="#name.Component" title="name.Component"><em>name.Component</em></a>) &#8211; component to exclude</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">self to allow chaining</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Exclude.excludeRange">
+<tt class="descname">excludeRange</tt><big>(</big><em>self</em>, <em>from</em>, <em>to</em><big>)</big><a class="headerlink" href="#Exclude.excludeRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exclude components from inclusive range [from, to]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>from</strong> &#8211; first element of the range</li>
+<li><strong>to</strong> &#8211; last element of the range</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">self to allow chaining</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Exclude.excludeBefore">
+<tt class="descname">excludeBefore</tt><big>(</big><em>self</em>, <em>to</em><big>)</big><a class="headerlink" href="#Exclude.excludeBefore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exclude all components from range [/, to]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>to</strong> &#8211; last element of the range</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">self to allow chaining</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Exclude.excludeAfter">
+<tt class="descname">excludeAfter</tt><big>(</big><em>self</em>, <em>from</em><big>)</big><a class="headerlink" href="#Exclude.excludeAfter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exclude all components from range [from, +Inf]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>to</strong> &#8211; last element of the range</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">self to allow chaining</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Accessors :</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Exclude.toWire">
+<tt class="descname">toWire</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Exclude.toWire" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Exclude.isExcluded">
+<tt class="descname">isExcluded</tt><big>(</big><em>self</em>, <em>component</em><big>)</big><a class="headerlink" href="#Exclude.isExcluded" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>component</strong> (<a class="reference internal" href="#name.Component" title="name.Component"><em>name.Component</em></a>) &#8211; Name component to check against the exclude filter</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>Depending on the implementation, the underlying data structure (e.g., <tt class="xref py py-class docutils literal"><span class="pre">dict</span></tt> or <tt class="xref cpp cpp-class docutils literal"><span class="pre">std::map</span></tt>) can be exposed through a language specific interface.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="signedinfo">
+<h3>SignedInfo<a class="headerlink" href="#signedinfo" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>Abstraction for the data block, associated with Data packet, which is signed alongside the name and the content, but which is not part of the content itself: META info about the content and/or signature.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Constants:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><dl class="data">
+<dt id="Content.BLOB">
+<tt class="descclassname">Content.</tt><tt class="descname">BLOB</tt><a class="headerlink" href="#Content.BLOB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data packet contains content of unknown (application-specific format)  (aka <tt class="docutils literal"><span class="pre">CONTENT_DATA</span></tt>)</p>
+</dd></dl>
+
+</li>
+</ul>
+<p>The following are the same as defined in CCNx document, but I&#8217;m not sure that we actually need to explicitly specify any of them.
+All of these define application-specific data, which is used (should be used) only in application (library=application).</p>
+<p>We can actually go beyond the type and use ContentType equivalent of HTTP, but again, this is app-specific.</p>
+<ul>
+<li><dl class="data">
+<dt id="Content.ENCR">
+<tt class="descclassname">Content.</tt><tt class="descname">ENCR</tt><a class="headerlink" href="#Content.ENCR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="data">
+<dt id="Content.GONE">
+<tt class="descclassname">Content.</tt><tt class="descname">GONE</tt><a class="headerlink" href="#Content.GONE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="data">
+<dt id="Content.KEY">
+<tt class="descclassname">Content.</tt><tt class="descname">KEY</tt><a class="headerlink" href="#Content.KEY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="data">
+<dt id="Content.LINK">
+<tt class="descclassname">Content.</tt><tt class="descname">LINK</tt><a class="headerlink" href="#Content.LINK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+<li><dl class="data">
+<dt id="Content.NACK">
+<tt class="descclassname">Content.</tt><tt class="descname">NACK</tt><a class="headerlink" href="#Content.NACK" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Constructors:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="__init__">
+<tt class="descname">__init__</tt><big>(</big><em>self</em>, <em>type = Content.BLOB</em>, <em>freshness = None</em>, <em>finalBlock = None</em>, <em>timestamp = None</em><big>)</big><a class="headerlink" href="#__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an empty exclude filter</p>
+<p><strong>Note</strong> SignedInfo does not contain keyLocator and publicKeyDigest items, it is part of the Signature block</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="fromWire">
+<em class="property">classmethod </em><tt class="descname">fromWire</tt><big>(</big><em>cls</em>, <em>buffer</em><big>)</big><a class="headerlink" href="#fromWire" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Modifiers:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="setType">
+<tt class="descname">setType</tt><big>(</big><em>self</em>, <em>type</em><big>)</big><a class="headerlink" href="#setType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="setFreshness">
+<tt class="descname">setFreshness</tt><big>(</big><em>self</em>, <em>type</em><big>)</big><a class="headerlink" href="#setFreshness" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="setFinalBlock">
+<tt class="descname">setFinalBlock</tt><big>(</big><em>self</em>, <em>type</em><big>)</big><a class="headerlink" href="#setFinalBlock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="setTimestamp">
+<tt class="descname">setTimestamp</tt><big>(</big><em>self</em>, <em>type</em><big>)</big><a class="headerlink" href="#setTimestamp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="setAppData">
+<tt class="descname">setAppData</tt><big>(</big><em>self</em>, <em>type</em>, <em>value</em><big>)</big><a class="headerlink" href="#setAppData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set application-specific data to be bundled with Data packet, but which is not part of the content, e.g., HTTP <tt class="docutils literal"><span class="pre">ContentType</span></tt>.</p>
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Accessors:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="toWire">
+<tt class="descname">toWire</tt><big>(</big><em>cls</em><big>)</big><a class="headerlink" href="#toWire" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="getType">
+<tt class="descname">getType</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#getType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="getFreshness">
+<tt class="descname">getFreshness</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#getFreshness" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="getFinalBlock">
+<tt class="descname">getFinalBlock</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#getFinalBlock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="getTimestamp">
+<tt class="descname">getTimestamp</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#getTimestamp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="getAppData">
+<tt class="descname">getAppData</tt><big>(</big><em>self</em>, <em>type</em><big>)</big><a class="headerlink" href="#getAppData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="error-reporting">
+<h2>Error reporting<a class="headerlink" href="#error-reporting" title="Permalink to this headline">¶</a></h2>
+<p>Most of the erros should be reported, if possible, in form of exceptions.  The following list of exception is currently defined:</p>
+<dl class="exception">
+<dt id="error.Error">
+<em class="property">exception </em><tt class="descclassname">error.</tt><tt class="descname">Error</tt><big>(</big><em>Exception</em><big>)</big><a class="headerlink" href="#error.Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic NDN error (base class of other errors)</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="error.Uri">
+<em class="property">exception </em><tt class="descclassname">error.</tt><tt class="descname">Uri</tt><a class="headerlink" href="#error.Uri" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="error.Name">
+<em class="property">exception </em><tt class="descclassname">error.</tt><tt class="descname">Name</tt><a class="headerlink" href="#error.Name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="error.name.Component">
+<em class="property">exception </em><tt class="descclassname">error.name.</tt><tt class="descname">Component</tt><a class="headerlink" href="#error.name.Component" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="error.Exclude">
+<em class="property">exception </em><tt class="descclassname">error.</tt><tt class="descname">Exclude</tt><a class="headerlink" href="#error.Exclude" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="exception">
+<dt id="error.KeyChain">
+<em class="property">exception </em><tt class="descclassname">error.</tt><tt class="descname">KeyChain</tt><a class="headerlink" href="#error.KeyChain" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p><em>Others TBD</em></p>
 </div>
 <div class="section" id="ndn-primitives">
 <h2>NDN primitives<a class="headerlink" href="#ndn-primitives" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
+<dt id="Face">
+<em class="property">class </em><tt class="descname">Face</tt><a class="headerlink" href="#Face" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstraction to create a communication channel an NDN daemon (local or remote).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Constructors :</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Face.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>self</em>, <em>autoconnect = True</em><big>)</big><a class="headerlink" href="#Face.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Operations :</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Face.connect">
+<tt class="descname">connect</tt><big>(</big><em>self</em>, <em>host = localhost</em><big>)</big><a class="headerlink" href="#Face.connect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Face.disconnect">
+<tt class="descname">disconnect</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Face.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Face.enableAutoVerification">
+<tt class="descname">enableAutoVerification</tt><big>(</big><em>self</em>, <em>enable = True</em><big>)</big><a class="headerlink" href="#Face.enableAutoVerification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable automatic verification of data packets according using either default or configured <a class="reference internal" href="#KeyChain" title="KeyChain"><tt class="xref py py-class docutils literal"><span class="pre">KeyChain</span></tt></a>.</p>
+<p><strong>Enabled by default</strong>. If disabled, an application needs to explicity call <a class="reference internal" href="#KeyChain.verify" title="KeyChain.verify"><tt class="xref py py-meth docutils literal"><span class="pre">KeyChain.verify()</span></tt></a> method for every received data packet.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Face.getKeyChain">
+<tt class="descname">getKeyChain</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Face.getKeyChain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get <a class="reference internal" href="#KeyChain" title="KeyChain"><tt class="xref py py-class docutils literal"><span class="pre">KeyChain</span></tt></a> object, e.g., to sign Data packet.
+If <a class="reference internal" href="#KeyChain" title="KeyChain"><tt class="xref py py-class docutils literal"><span class="pre">KeyChain</span></tt></a> has been previously set with <a class="reference internal" href="#Face.setKeyChain" title="Face.setKeyChain"><tt class="xref py py-meth docutils literal"><span class="pre">setKeyChain()</span></tt></a> method, the configured <a class="reference internal" href="#KeyChain" title="KeyChain"><tt class="xref py py-class docutils literal"><span class="pre">KeyChain</span></tt></a> will be returned, otherwise the default key chain will be returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><a class="reference internal" href="#KeyChain" title="KeyChain"><tt class="xref py py-class docutils literal"><span class="pre">KeyChain</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Face.setKeyChain">
+<tt class="descname">setKeyChain</tt><big>(</big><em>self</em>, <em>keyChain</em><big>)</big><a class="headerlink" href="#Face.setKeyChain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set configured <a class="reference internal" href="#KeyChain" title="KeyChain"><tt class="xref py py-class docutils literal"><span class="pre">KeyChain</span></tt></a> to use for signing/verification operations</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>keyChain</strong> (<a class="reference internal" href="#KeyChain" title="KeyChain"><em>KeyChain</em></a>) &#8211; configure key chain</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Face.expressInterest">
+<tt class="descname">expressInterest</tt><big>(</big><em>self</em>, <em>interest</em>, <em>onData</em>, <em>onTimeout = None</em><big>)</big><a class="headerlink" href="#Face.expressInterest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Express interest for the data.</p>
+<p>There could be a form of this method (overloaded in C++ or with type check in python), accepting <a class="reference internal" href="#Name" title="Name"><tt class="xref py py-class docutils literal"><span class="pre">Name</span></tt></a> as a first parameter (instead of interest).</p>
+<p>Multiple interests can be expressed for the same name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>interest</strong> (<a class="reference internal" href="#Interest" title="Interest"><tt class="xref py py-class docutils literal"><span class="pre">Interest</span></tt></a> or <a class="reference internal" href="#Name" title="Name"><tt class="xref py py-class docutils literal"><span class="pre">Name</span></tt></a>) &#8211; Interest to express or simply name to request</li>
+<li><strong>onData</strong> (<a class="reference internal" href="#Face.onTimeout" title="Face.onTimeout"><tt class="xref py py-meth docutils literal"><span class="pre">onTimeout()</span></tt></a>) &#8211; Callback to be called when data is received</li>
+<li><strong>onTimeout</strong> &#8211; Optional callback to be called when expressed Interest times out.  If the application requires Interest to be reexpressed, it need to explicitly call <a class="reference internal" href="#Face.expressInterest" title="Face.expressInterest"><tt class="xref py py-meth docutils literal"><span class="pre">Face.expressInterest()</span></tt></a> call again.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>??</strong> some identifier, so it is possible to cancel the interest, if necessary</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Face.onData">
+<tt class="descname">onData</tt><big>(</big><em>interest</em>, <em>data</em><big>)</big><a class="headerlink" href="#Face.onData" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>interest</strong> (<a class="reference internal" href="#Interest" title="Interest"><em>Interest</em></a>) &#8211; original Interest that was expressed</li>
+<li><strong>data</strong> (<a class="reference internal" href="#Data" title="Data"><em>Data</em></a>) &#8211; received data packet</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">nothing</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Face.onTimeout">
+<tt class="descname">onTimeout</tt><big>(</big><em>interest</em><big>)</big><a class="headerlink" href="#Face.onTimeout" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>interest</strong> &#8211; original Interest that was expressed</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>In some implementation, e.g., C (and optionally C++, but not recommended), expressInterest should accept an optional <tt class="xref cpp cpp-class docutils literal"><span class="pre">void*</span></tt> parameter that can be used to hold user data.</p>
+<p>In C++ implementation callback parameter should be either of C++11 <tt class="docutils literal"><span class="pre">std::function</span></tt>, <tt class="docutils literal"><span class="pre">boost::function</span></tt>, or any other similar functor concept (e.g., <tt class="docutils literal"><span class="pre">Callback</span></tt> in ndnSIM).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Face.cancelInterest">
+<tt class="descname">cancelInterest</tt><big>(</big><em>self</em>, <em>interest</em><big>)</big><a class="headerlink" href="#Face.cancelInterest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Face.setInterestFilter">
+<tt class="descname">setInterestFilter</tt><big>(</big><em>self</em>, <em>prefix</em>, <em>onInterest</em>, <em>flags = None</em><big>)</big><a class="headerlink" href="#Face.setInterestFilter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set interest filter for a prefix (aka <tt class="docutils literal"><span class="pre">registerPrefix</span></tt>)</p>
+<p>Multiple filters can be set up for the same prefix</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>prefix</strong> (<a class="reference internal" href="#Name" title="Name"><em>Name</em></a>) &#8211; Name prefix to register filter for (e.g., create a local FIB entry, which may or may not propagate further)</li>
+<li><strong>onInterest</strong> (<a class="reference internal" href="#Face.onInterest" title="Face.onInterest"><tt class="xref py py-meth docutils literal"><span class="pre">onInterest()</span></tt></a>) &#8211; Callback to be called when interest for the registered filter arrives</li>
+<li><strong>flags</strong> &#8211; <strong>??</strong></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>??</strong> some identifier, so it is possible to cancel the interest, if necessary</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Face.onInterest">
+<tt class="descname">onInterest</tt><big>(</big><em>prefix</em>, <em>interest</em><big>)</big><a class="headerlink" href="#Face.onInterest" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>interest</strong> (<a class="reference internal" href="#Name" title="Name"><em>Name</em></a>) &#8211; original prefix set in filter</li>
+<li><strong>data</strong> (<a class="reference internal" href="#Interest" title="Interest"><em>Interest</em></a>) &#8211; received Interest packet</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">nothing</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="method">
+<dt id="Face.clearInterestFilter">
+<tt class="descname">clearInterestFilter</tt><big>(</big><em>self</em>, <em>prefix</em><big>)</big><a class="headerlink" href="#Face.clearInterestFilter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Face.put">
+<tt class="descname">put</tt><big>(</big><em>self</em>, <em>data</em><big>)</big><a class="headerlink" href="#Face.put" title="Permalink to this definition">¶</a></dt>
+<dd><p><tt class="docutils literal"><span class="pre">Publish</span></tt> Data packet, either as a response to the incoming Interest or proactively publish to local cache, e.g., implementing prefetching under the expectation of more Interest to arrive.</p>
+<p><strong>May be a better name should be used instead</strong></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="Interest">
 <em class="property">class </em><tt class="descname">Interest</tt><a class="headerlink" href="#Interest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interest abstraction</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Constructors :</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Interest.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>self</em>, <em>interest = None</em><big>)</big><a class="headerlink" href="#Interest.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create either an empty interst or copy of the existing one</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">__init__</tt><big>(</big><em>self</em>, <em>name</em>, <em>minSuffixComponents = None</em>, <em>maxSuffixComponents = None</em>, <em>publisherPublicKeyDigest = None</em>, <em>exclude = None</em>, <em>childSelector = None</em>, <em>answerOriginKind = None</em>, <em>scope = None</em>, <em>interestLifetime = None</em>, <em>nonce = None</em><big>)</big></dt>
+<dd><p>Create interest from name and any other optional parameter.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="Interest.fromWire">
+<em class="property">classmethod </em><tt class="descname">fromWire</tt><big>(</big><em>cls</em>, <em>buffer</em><big>)</big><a class="headerlink" href="#Interest.fromWire" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Modifiers :</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Interest.setName">
+<tt class="descname">setName</tt><big>(</big><em>self</em>, <em>name</em><big>)</big><a class="headerlink" href="#Interest.setName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.setMinSuffixComponents">
+<tt class="descname">setMinSuffixComponents</tt><big>(</big><em>self</em>, <em>value</em><big>)</big><a class="headerlink" href="#Interest.setMinSuffixComponents" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.setMaxSuffixComponents">
+<tt class="descname">setMaxSuffixComponents</tt><big>(</big><em>self</em>, <em>value</em><big>)</big><a class="headerlink" href="#Interest.setMaxSuffixComponents" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.setPublisherPublicKeyDigest">
+<tt class="descname">setPublisherPublicKeyDigest</tt><big>(</big><em>self</em>, <em>value</em><big>)</big><a class="headerlink" href="#Interest.setPublisherPublicKeyDigest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.setExclude">
+<tt class="descname">setExclude</tt><big>(</big><em>self</em>, <em>exclude</em><big>)</big><a class="headerlink" href="#Interest.setExclude" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.setChildSelector">
+<tt class="descname">setChildSelector</tt><big>(</big><em>self</em>, <em>value</em><big>)</big><a class="headerlink" href="#Interest.setChildSelector" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.setAnswerOriginKind">
+<tt class="descname">setAnswerOriginKind</tt><big>(</big><em>self</em>, <em>value</em><big>)</big><a class="headerlink" href="#Interest.setAnswerOriginKind" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.setScope">
+<tt class="descname">setScope</tt><big>(</big><em>self</em>, <em>value</em><big>)</big><a class="headerlink" href="#Interest.setScope" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.setInterestLifetime">
+<tt class="descname">setInterestLifetime</tt><big>(</big><em>self</em>, <em>value</em><big>)</big><a class="headerlink" href="#Interest.setInterestLifetime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.setNonce">
+<tt class="descname">setNonce</tt><big>(</big><em>self</em>, <em>value</em><big>)</big><a class="headerlink" href="#Interest.setNonce" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Accessors :</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Interest.toWire">
+<tt class="descname">toWire</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Interest.toWire" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.getName">
+<tt class="descname">getName</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Interest.getName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.getMinSuffixComponents">
+<tt class="descname">getMinSuffixComponents</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Interest.getMinSuffixComponents" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.getMaxSuffixComponents">
+<tt class="descname">getMaxSuffixComponents</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Interest.getMaxSuffixComponents" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.getPublisherPublicKeyDigest">
+<tt class="descname">getPublisherPublicKeyDigest</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Interest.getPublisherPublicKeyDigest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.getExclude">
+<tt class="descname">getExclude</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Interest.getExclude" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.getChildSelector">
+<tt class="descname">getChildSelector</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Interest.getChildSelector" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.getAnswerOriginKind">
+<tt class="descname">getAnswerOriginKind</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Interest.getAnswerOriginKind" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.getScope">
+<tt class="descname">getScope</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Interest.getScope" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.getInterestLifetime">
+<tt class="descname">getInterestLifetime</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Interest.getInterestLifetime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Interest.getNonce">
+<tt class="descname">getNonce</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Interest.getNonce" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Language specific accessors (e.g., <tt class="docutils literal"><span class="pre">__str</span></tt> in python and <tt class="docutils literal"><span class="pre">operator&lt;&lt;</span></tt> in C++) for debugging purposes.</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="Data">
 <em class="property">class </em><tt class="descname">Data</tt><a class="headerlink" href="#Data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data abstraction</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Constructors :</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Data.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>self</em>, <em>data = None</em><big>)</big><a class="headerlink" href="#Data.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create either an empty Data packet or copy of the existing one.
+The cached/signed wire format should be copied as well.</p>
+</dd></dl>
+
+<dl class="method">
+<dt>
+<tt class="descname">__init__</tt><big>(</big><em>self</em>, <em>name</em>, <em>content = None</em>, <em>signed_info = None</em><big>)</big></dt>
+<dd><p>Create Data packet from name and any other optional parameter.</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="Data.fromWire">
+<em class="property">classmethod </em><tt class="descname">fromWire</tt><big>(</big><em>cls</em>, <em>buffer</em><big>)</big><a class="headerlink" href="#Data.fromWire" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Modifiers :</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Data.setName">
+<tt class="descname">setName</tt><big>(</big><em>self</em>, <em>name</em><big>)</big><a class="headerlink" href="#Data.setName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Data.setSignedInfo">
+<tt class="descname">setSignedInfo</tt><big>(</big><em>self</em>, <em>signedInfo</em><big>)</big><a class="headerlink" href="#Data.setSignedInfo" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>signedInfo</strong> (<em>SignedInfo</em>) &#8211; Information about content and/or signature</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Data.setContent">
+<tt class="descname">setContent</tt><big>(</big><em>self</em>, <em>content</em><big>)</big><a class="headerlink" href="#Data.setContent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Data.setSignature">
+<tt class="descname">setSignature</tt><big>(</big><em>self</em>, <em>signature</em><big>)</big><a class="headerlink" href="#Data.setSignature" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="Data._setSignedWire">
+<tt class="descname">_setSignedWire</tt><big>(</big><em>self</em>, <em>wire</em><big>)</big><a class="headerlink" href="#Data._setSignedWire" title="Permalink to this definition">¶</a></dt>
+<dd><p>Signature module should have access to a private function to set Data packet wire format.</p>
+</dd></dl>
+
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Accessors :</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Data.toWire">
+<tt class="descname">toWire</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Data.toWire" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get wire represenation of the Data packet.</p>
+<p><strong>Note</strong> This method should fail (e.g., raise an exception) if Data packet has not been signed or not marked explicitly as unsigned.
+In other words, if <a class="reference internal" href="#Data.setSignature" title="Data.setSignature"><tt class="xref py py-meth docutils literal"><span class="pre">setSignature()</span></tt></a> was never called (implicitly or explicitly), signing should fail.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Data.getName">
+<tt class="descname">getName</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Data.getName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Data.getSignedInfo">
+<tt class="descname">getSignedInfo</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Data.getSignedInfo" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Data.getContent">
+<tt class="descname">getContent</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Data.getContent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Setting/accessing content of the data packet can be exposed as a language-specific buffer operation on Data packet structure.
+For example, Python can provide <tt class="docutils literal"><span class="pre">buffer</span> <span class="pre">(data)</span></tt> and C++ set of container operations, including <tt class="docutils literal"><span class="pre">operator[]</span></tt>, <tt class="docutils literal"><span class="pre">begin</span></tt>, <tt class="docutils literal"><span class="pre">end</span></tt>, <tt class="docutils literal"><span class="pre">size</span></tt>, and others.</p>
+<dl class="method">
+<dt id="Data.getSignature">
+<tt class="descname">getSignature</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Data.getSignature" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="Data._getUnsignedWire">
+<tt class="descname">_getUnsignedWire</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Data._getUnsignedWire" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Signature module should have access to this private method to get unsigned wire format of Data packet (everything else, except Signature block)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="security-primitives">
+<h2>Security primitives<a class="headerlink" href="#security-primitives" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="KeyChain">
+<em class="property">class </em><tt class="descname">KeyChain</tt><a class="headerlink" href="#KeyChain" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="KeyChain.getPolicyManager">
+<tt class="descname">getPolicyManager</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#KeyChain.getPolicyManager" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="KeyChain.createIdentity">
+<tt class="descname">createIdentity</tt><big>(</big><em>self</em>, <em>identityName</em>, <em>...</em><big>)</big><a class="headerlink" href="#KeyChain.createIdentity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="KeyChain.generateKeyPair">
+<tt class="descname">generateKeyPair</tt><big>(</big><em>self</em>, <em>keyName</em>, <em>...</em><big>)</big><a class="headerlink" href="#KeyChain.generateKeyPair" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>keyName</strong> &#8211; requested key name for the generated pair. If keyName is identityName, then the actual key name will be automatically generated.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">name</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="KeyChain.generateRsaKeyPair">
+<tt class="descname">generateRsaKeyPair</tt><big>(</big><em>self</em>, <em>keyName</em>, <em>numBits</em><big>)</big><a class="headerlink" href="#KeyChain.generateRsaKeyPair" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="KeyChain.createSigningRequest">
+<tt class="descname">createSigningRequest</tt><big>(</big><em>self</em>, <em>keyName</em><big>)</big><a class="headerlink" href="#KeyChain.createSigningRequest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="KeyChain.installCertificate">
+<tt class="descname">installCertificate</tt><big>(</big><em>self</em>, <em>certificateDataPacket</em><big>)</big><a class="headerlink" href="#KeyChain.installCertificate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="KeyChain.setDefaultIdentity">
+<tt class="descname">setDefaultIdentity</tt><big>(</big><em>self</em>, <em>name</em><big>)</big><a class="headerlink" href="#KeyChain.setDefaultIdentity" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="KeyChain.setDefaultKey">
+<tt class="descname">setDefaultKey</tt><big>(</big><em>self</em>, <em>name</em><big>)</big><a class="headerlink" href="#KeyChain.setDefaultKey" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="KeyChain.setDefaultCertificate">
+<tt class="descname">setDefaultCertificate</tt><big>(</big><em>self</em>, <em>name</em><big>)</big><a class="headerlink" href="#KeyChain.setDefaultCertificate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p><em>Other methods TBD</em></p>
+<dl class="method">
+<dt id="KeyChain._sign">
+<tt class="descname">_sign</tt><big>(</big><em>self</em>, <em>buffer</em>, <em>certName</em><big>)</big><a class="headerlink" href="#KeyChain._sign" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sign the supplied <tt class="docutils literal"><span class="pre">buffer</span></tt> with a key identified by <tt class="docutils literal"><span class="pre">certName</span></tt>.</p>
+<p>This version may or may not be private.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>buffer</strong> (<em>bytes</em>) &#8211; Buffer to sign</li>
+<li><strong>certName</strong> (<a class="reference internal" href="#Name" title="Name"><em>Name</em></a>) &#8211; Name to identify key/certificate to use for signing the supplied buffer</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The appropriate instance of <a class="reference internal" href="#Signature" title="Signature"><tt class="xref py py-class docutils literal"><span class="pre">Signature</span></tt></a>, holding signature bits and (if necessary) associated information, such as <tt class="docutils literal"><span class="pre">KeyLocator</span></tt>, <tt class="docutils literal"><span class="pre">Witness</span></tt>, and other.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>C++ version may operate on <tt class="docutils literal"><span class="pre">std::istream</span></tt> in addition (or instead) memory buffer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="KeyChain.sign">
+<tt class="descname">sign</tt><big>(</big><em>self</em>, <em>data</em>, <em>certName = None</em><big>)</big><a class="headerlink" href="#KeyChain.sign" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper method to create fully formatted and signed Data packets.
+If <tt class="docutils literal"><span class="pre">certName</span></tt> is not specified, it will be guessed using <a class="reference internal" href="#policy.Sign" title="policy.Sign"><tt class="xref py py-class docutils literal"><span class="pre">policy.Sign</span></tt></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<a class="reference internal" href="#Data" title="Data"><em>Data</em></a>) &#8211; Data packet</li>
+<li><strong>certName</strong> (<a class="reference internal" href="#Name" title="Name"><em>Name</em></a>) &#8211; Optional name to identify key/certificate to use for signing the supplied buffer</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This method should be roughly equivalent to the following operations:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">sign</span> <span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">certName</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+    <span class="n">unsignedBuffer</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">_toUnsignedWire</span> <span class="p">()</span>
+    <span class="n">certName</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPolicyManager</span> <span class="p">()</span><span class="o">.</span><span class="n">getSigningCertName</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">getName</span> <span class="p">())</span>
+    <span class="n">signature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sign</span> <span class="p">(</span><span class="n">unsignedBuffer</span><span class="p">,</span> <span class="n">certName</span><span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">setSignature</span> <span class="p">(</span><span class="n">signature</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The following example demonstrates how data packets can be created, signed, and published:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">face</span> <span class="o">=</span> <span class="n">Face</span> <span class="p">()</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">Data</span> <span class="p">()</span>
+<span class="n">data</span><span class="o">.</span><span class="n">setName</span> <span class="p">(</span><span class="n">Name</span> <span class="p">(</span><span class="s">&quot;/hello/world&quot;</span><span class="p">))</span>
+<span class="n">data</span><span class="o">.</span><span class="n">setSignedInfo</span> <span class="p">(</span><span class="n">SignedInfo</span> <span class="p">(</span><span class="n">freshness</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">))</span>
+<span class="n">data</span><span class="o">.</span><span class="n">setContent</span> <span class="p">(</span><span class="s">&quot;Hello, World!&quot;</span><span class="p">)</span>
+
+<span class="n">face</span><span class="o">.</span><span class="n">getKeyChain</span> <span class="p">()</span><span class="o">.</span><span class="n">sign</span> <span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">face</span><span class="o">.</span><span class="n">put</span> <span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="KeyChain._verify">
+<tt class="descname">_verify</tt><big>(</big><em>self</em>, <em>buffer</em>, <em>signature</em><big>)</big><a class="headerlink" href="#KeyChain._verify" title="Permalink to this definition">¶</a></dt>
+<dd><p>This version may or may not be private.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>buffer</strong> (<em>bytes</em>) &#8211; The buffer to verify</li>
+<li><strong>signature</strong> (<a class="reference internal" href="#Signature" title="Signature"><em>Signature</em></a>) &#8211; Signature object, e.g., <tt class="xref py py-class docutils literal"><span class="pre">signature.Sha256WithRsa</span></tt>, containing an appropriate signature of the supplied buffer</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="KeyChain.verify">
+<tt class="descname">verify</tt><big>(</big><em>self</em>, <em>data</em><big>)</big><a class="headerlink" href="#KeyChain.verify" title="Permalink to this definition">¶</a></dt>
+<dd><p>The helper method to verify data packets</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<a class="reference internal" href="#Data" title="Data"><em>Data</em></a>) &#8211; Data packet</td>
+</tr>
+</tbody>
+</table>
+<p>Usage example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">onData</span> <span class="p">(</span><span class="n">interest</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">face</span><span class="o">.</span><span class="n">getKeyChain</span> <span class="p">()</span><span class="o">.</span><span class="n">verify</span> <span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s">&quot;Data packet cannot be verified)</span>
+    <span class="k">print</span> <span class="n">data</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Signature">
+<em class="property">class </em><tt class="descname">Signature</tt><a class="headerlink" href="#Signature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for NDN signatures (different types of signatures are possible).  Currently define the following:</p>
+<ul class="simple">
+<li><strong>Signature.SHA256_WITH_RSA</strong></li>
+<li><strong>Signature.MERKLE_HASH_WITH_RSA</strong></li>
+</ul>
+<dl class="method">
+<dt id="Signature.getType">
+<tt class="descname">getType</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Signature.getType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get signature type</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Signature.signature.Sha256WithRsa">
+<em class="property">class </em><tt class="descclassname">signature.</tt><tt class="descname">Sha256WithRsa</tt><a class="headerlink" href="#Signature.signature.Sha256WithRsa" title="Permalink to this definition">¶</a></dt>
+<dd><p>The standard signature that is currently used in CCNx</p>
+<dl class="method">
+<dt id="Signature.signature.Sha256WithRsa.setKeyLocator">
+<tt class="descname">setKeyLocator</tt><big>(</big><em>self</em>, <em>certName</em><big>)</big><a class="headerlink" href="#Signature.signature.Sha256WithRsa.setKeyLocator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Signature.signature.Sha256WithRsa.setPublicKeyDigest">
+<tt class="descname">setPublicKeyDigest</tt><big>(</big><em>self</em>, <em>digest</em><big>)</big><a class="headerlink" href="#Signature.signature.Sha256WithRsa.setPublicKeyDigest" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>This may not be necessary, unless there is a good reason to keep it</strong></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Signature.signature.Sha256WithRsa.setSignatureBits">
+<tt class="descname">setSignatureBits</tt><big>(</big><em>self</em>, <em>bits</em><big>)</big><a class="headerlink" href="#Signature.signature.Sha256WithRsa.setSignatureBits" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Signature.signature.Sha256WithRsa.getKeyLocator">
+<tt class="descname">getKeyLocator</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Signature.signature.Sha256WithRsa.getKeyLocator" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Signature.signature.Sha256WithRsa.getPublicKeyDigest">
+<tt class="descname">getPublicKeyDigest</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Signature.signature.Sha256WithRsa.getPublicKeyDigest" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>This may not be necessary, unless there is a good reason to keep it</strong></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Signature.signature.Sha256WithRsa.getSignatureBits">
+<tt class="descname">getSignatureBits</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#Signature.signature.Sha256WithRsa.getSignatureBits" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="signature.MerkleHashWithRsa">
+<em class="property">class </em><tt class="descclassname">signature.</tt><tt class="descname">MerkleHashWithRsa</tt><a class="headerlink" href="#signature.MerkleHashWithRsa" title="Permalink to this definition">¶</a></dt>
+<dd><p>The aggregated signature</p>
+<p><em>TBD</em></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="PolicyManager">
+<em class="property">class </em><tt class="descname">PolicyManager</tt><a class="headerlink" href="#PolicyManager" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="PolicyManager.setVerificationPolicy">
+<tt class="descname">setVerificationPolicy</tt><big>(</big><em>self</em>, <em>policy</em><big>)</big><a class="headerlink" href="#PolicyManager.setVerificationPolicy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="PolicyManager.setSigningPolicy">
+<tt class="descname">setSigningPolicy</tt><big>(</big><em>self</em>, <em>policy</em><big>)</big><a class="headerlink" href="#PolicyManager.setSigningPolicy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="policy.Verify">
+<em class="property">class </em><tt class="descclassname">policy.</tt><tt class="descname">Verify</tt><a class="headerlink" href="#policy.Verify" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="class">
+<dt id="policy.Verify.policy.verify.Identity">
+<em class="property">class </em><tt class="descclassname">policy.verify.</tt><tt class="descname">Identity</tt><a class="headerlink" href="#policy.Verify.policy.verify.Identity" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="policy.Verify.policy.verify.Identity.doesComply">
+<tt class="descname">doesComply</tt><big>(</big><em>dataPacket</em><big>)</big><a class="headerlink" href="#policy.Verify.policy.verify.Identity.doesComply" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="policy.Sign">
+<em class="property">class </em><tt class="descclassname">policy.</tt><tt class="descname">Sign</tt><a class="headerlink" href="#policy.Sign" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="class">
+<dt id="policy.Sign.policy.sign.Identity">
+<em class="property">class </em><tt class="descclassname">policy.sign.</tt><tt class="descname">Identity</tt><a class="headerlink" href="#policy.Sign.policy.sign.Identity" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="policy.Sign.policy.sign.Identity.doesComply">
+<tt class="descname">doesComply</tt><big>(</big><em>dataPacket</em>, <em>certName</em><big>)</big><a class="headerlink" href="#policy.Sign.policy.sign.Identity.doesComply" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="policy.Sign.policy.sign.Identity.getComplyingCertName">
+<tt class="descname">getComplyingCertName</tt><big>(</big><em>dataPacket</em><big>)</big><a class="headerlink" href="#policy.Sign.policy.sign.Identity.getComplyingCertName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</dd></dl>
 
 </div>
 </div>
@@ -398,9 +1457,13 @@ get(-1) getting the last component, get(-2) is getting second component from bac
 <li><a class="reference internal" href="#blob">Blob</a></li>
 <li><a class="reference internal" href="#name-component">Name component</a></li>
 <li><a class="reference internal" href="#name">Name</a></li>
+<li><a class="reference internal" href="#exclude">Exclude</a></li>
+<li><a class="reference internal" href="#signedinfo">SignedInfo</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#error-reporting">Error reporting</a></li>
 <li><a class="reference internal" href="#ndn-primitives">NDN primitives</a></li>
+<li><a class="reference internal" href="#security-primitives">Security primitives</a></li>
 </ul>
 </li>
 </ul>
