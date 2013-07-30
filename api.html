@@ -715,8 +715,16 @@ All of these define application-specific data, which is used (should be used) on
 </table>
 <dl class="method">
 <dt id="Face.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>self</em>, <em>autoconnect = True</em><big>)</big><a class="headerlink" href="#Face.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<tt class="descname">__init__</tt><big>(</big><em>self</em>, <em>ioEventLoop</em>, <em>autoconnect = True</em><big>)</big><a class="headerlink" href="#Face.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>eventLoop</strong> (<a class="reference internal" href="#IoEventLoop" title="IoEventLoop"><em>IoEventLoop</em></a>) &#8211; An object that represents processing thread and a link to the operating system&#8217;s I/O services (should be similar to io_service in in <a class="reference external" href="http://www.boost.org/doc/libs/1_54_0/doc/html/boost_asio/overview/core/basics.html">Boost.Asio</a> )</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1167,6 +1175,49 @@ For example, Python can provide <tt class="docutils literal"><span class="pre">b
 </dd></dl>
 
 </div>
+<div class="section" id="helpers">
+<h2>Helpers<a class="headerlink" href="#helpers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="IoEventLoop">
+<em class="property">class </em><tt class="descname">IoEventLoop</tt><a class="headerlink" href="#IoEventLoop" title="Permalink to this definition">¶</a></dt>
+<dd><p>We can try to borrow Proactor async pattern from <a class="reference external" href="http://www.boost.org/doc/libs/1_54_0/doc/html/boost_asio/overview/core/async.html">Boost.Asio</a>.</p>
+<p>(I partially copied some docs from Boost)</p>
+<img src="_images/io-event-loop.svg" /><p>Not all platforms would require use of IoEventLoop, which can be either implemented (for the API compatibility) as a NOOP, or completely omitted.
+For example, JavaScript and NS-3 provide their own asyncrhonous event dispatchers.</p>
+<p>We can either borrow everything or some subset from <a class="reference external" href="http://www.boost.org/doc/libs/1_54_0/doc/html/boost_asio/reference/io_service.html">io_service</a> implementation:</p>
+<dl class="method">
+<dt id="IoEventLoop.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#IoEventLoop.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="IoEventLoop.run">
+<tt class="descname">run</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#IoEventLoop.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The run() function blocks until all work has finished and there are no more handlers to be dispatched, or until the IoEventLoop has been stopped.</p>
+<dl class="method">
+<dt id="IoEventLoop.runOne">
+<tt class="descname">runOne</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#IoEventLoop.runOne" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The runOne() function blocks until one handler has been dispatched, or until the io_service has been stopped.</p>
+<dl class="method">
+<dt id="IoEventLoop.stop">
+<tt class="descname">stop</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#IoEventLoop.stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This function does not block, but instead simply signals the io_service to stop.
+All invocations of its run() or run_one() member functions should return as soon as possible. Subsequent calls to run(), runOne(), poll() or pollOne() will return immediately until reset() is called.</p>
+<dl class="method">
+<dt id="IoEventLoop.dispatch">
+<tt class="descname">dispatch</tt><big>(</big><em>self</em>, <em>callback</em><big>)</big><a class="headerlink" href="#IoEventLoop.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This function is used to ask the IoEventLoop to execute the given handler.</p>
+</dd></dl>
+
+</div>
 <div class="section" id="security-primitives">
 <h2>Security primitives<a class="headerlink" href="#security-primitives" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
@@ -1463,6 +1514,7 @@ If <tt class="docutils literal"><span class="pre">certName</span></tt> is not sp
 </li>
 <li><a class="reference internal" href="#error-reporting">Error reporting</a></li>
 <li><a class="reference internal" href="#ndn-primitives">NDN primitives</a></li>
+<li><a class="reference internal" href="#helpers">Helpers</a></li>
 <li><a class="reference internal" href="#security-primitives">Security primitives</a></li>
 </ul>
 </li>
