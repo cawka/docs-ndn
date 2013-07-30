@@ -345,7 +345,10 @@ NDN primitives
 
     :Constructors:
 
-    .. method:: __init__ (self, autoconnect = True)
+    .. method:: __init__ (self, ioEventLoop, autoconnect = True)
+
+        :param eventLoop: An object that represents processing thread and a link to the operating system's I/O services (should be similar to io_service in in `Boost.Asio <http://www.boost.org/doc/libs/1_54_0/doc/html/boost_asio/overview/core/basics.html>`_ )
+        :type eventLoop: IoEventLoop
 
     :Operations:
 
@@ -545,6 +548,41 @@ NDN primitives
         .. method:: _getUnsignedWire (self)
 
         Signature module should have access to this private method to get unsigned wire format of Data packet (everything else, except Signature block)
+
+Helpers
+-------
+
+.. class:: IoEventLoop
+
+    We can try to borrow Proactor async pattern from `Boost.Asio <http://www.boost.org/doc/libs/1_54_0/doc/html/boost_asio/overview/core/async.html>`_.
+
+    (I partially copied some docs from Boost)
+
+    .. image:: _static/io-event-loop.svg
+
+    Not all platforms would require use of IoEventLoop, which can be either implemented (for the API compatibility) as a NOOP, or completely omitted.
+    For example, JavaScript and NS-3 provide their own asyncrhonous event dispatchers.
+
+    We can either borrow everything or some subset from `io_service <http://www.boost.org/doc/libs/1_54_0/doc/html/boost_asio/reference/io_service.html>`_ implementation:
+
+    .. method:: __init__ (self)
+
+    .. method:: run (self)
+
+    The run() function blocks until all work has finished and there are no more handlers to be dispatched, or until the IoEventLoop has been stopped.
+
+    .. method:: runOne (self)
+
+    The runOne() function blocks until one handler has been dispatched, or until the io_service has been stopped.
+
+    .. method:: stop (self)
+
+    This function does not block, but instead simply signals the io_service to stop. 
+    All invocations of its run() or run_one() member functions should return as soon as possible. Subsequent calls to run(), runOne(), poll() or pollOne() will return immediately until reset() is called.
+
+    .. method:: dispatch (self, callback)
+
+    This function is used to ask the IoEventLoop to execute the given handler.
 
 Security primitives
 -------------------
