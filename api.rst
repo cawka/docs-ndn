@@ -589,6 +589,10 @@ Security primitives
 
 .. class:: KeyChain
 
+    .. method:: __init__ (self, Face)
+
+    Some KeyChain operations require NDN communication (e.g., :py:meth:`verify`) and are asynchronous (Face will provide IoEvenLoop for that).
+
     .. method:: getPolicyManager (self)
 
     .. method:: createIdentity (self, identityName, ...)
@@ -666,21 +670,41 @@ Security primitives
         :param signature: Signature object, e.g., :py:class:`signature.Sha256WithRsa`, containing an appropriate signature of the supplied buffer
         :type signature: Signature
 
-    .. method:: verify (self, data)
+    .. method:: verify (self, data, onVerify, onVerifyError = None)
 
-        The helper method to verify data packets
+        The helper method to verify data packets (asynchronous operation)
 
         :param data: Data packet
         :type data: Data
+
+        :param onVerify: Callback to be called when data is verified
+        :type onVerify: :py:meth:`onVerify`
+        :param onVerifyError: Optional callback to be called when verification fails
+        :type onVerifyError: :py:meth:`onVerifyError`
+
+        .. method:: onVerify (data)
+
+            :param data: original data packet
+            :type data: Data
+            :returns: nothing
+
+        .. method:: onVerifyError (data, error)
+
+            :param data: original data packet
+            :type data: Data
+            :param error: Error message (or error code)
+            :returns: nothing
 
         Usage example:
 
         .. code-block:: python
 
+            def onVerify (data):
+                print "Huraaaay! %s" % data.getName ()
+
             def onData (interest, data):                
-                if not face.getKeyChain ().verify (data):
-                    raise Exception ("Data packet cannot be verified)
-                print data
+                face.getKeyChain ().verify (data, onVerify)
+                # all non-verifiable packet will be silently dropped
 
 .. class:: Signature
 
