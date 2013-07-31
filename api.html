@@ -1224,6 +1224,12 @@ All invocations of its run() or run_one() member functions should return as soon
 <dt id="KeyChain">
 <em class="property">class </em><tt class="descname">KeyChain</tt><a class="headerlink" href="#KeyChain" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
+<dt id="KeyChain.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>self</em>, <em>Face</em><big>)</big><a class="headerlink" href="#KeyChain.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Some KeyChain operations require NDN communication (e.g., <a class="reference internal" href="#KeyChain.verify" title="KeyChain.verify"><tt class="xref py py-meth docutils literal"><span class="pre">verify()</span></tt></a>) and are asynchronous (Face will provide IoEvenLoop for that).</p>
+<dl class="method">
 <dt id="KeyChain.getPolicyManager">
 <tt class="descname">getPolicyManager</tt><big>(</big><em>self</em><big>)</big><a class="headerlink" href="#KeyChain.getPolicyManager" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -1360,21 +1366,63 @@ If <tt class="docutils literal"><span class="pre">certName</span></tt> is not sp
 
 <dl class="method">
 <dt id="KeyChain.verify">
-<tt class="descname">verify</tt><big>(</big><em>self</em>, <em>data</em><big>)</big><a class="headerlink" href="#KeyChain.verify" title="Permalink to this definition">¶</a></dt>
-<dd><p>The helper method to verify data packets</p>
+<tt class="descname">verify</tt><big>(</big><em>self</em>, <em>data</em>, <em>onVerify</em>, <em>onVerifyError = None</em><big>)</big><a class="headerlink" href="#KeyChain.verify" title="Permalink to this definition">¶</a></dt>
+<dd><p>The helper method to verify data packets (asynchronous operation)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<a class="reference internal" href="#Data" title="Data"><em>Data</em></a>) &#8211; Data packet</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<a class="reference internal" href="#Data" title="Data"><em>Data</em></a>) &#8211; Data packet</li>
+<li><strong>onVerify</strong> (<a class="reference internal" href="#KeyChain.onVerify" title="KeyChain.onVerify"><tt class="xref py py-meth docutils literal"><span class="pre">onVerify()</span></tt></a>) &#8211; Callback to be called when data is verified</li>
+<li><strong>onVerifyError</strong> (<a class="reference internal" href="#KeyChain.onVerifyError" title="KeyChain.onVerifyError"><tt class="xref py py-meth docutils literal"><span class="pre">onVerifyError()</span></tt></a>) &#8211; Optional callback to be called when verification fails</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="KeyChain.onVerify">
+<tt class="descname">onVerify</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#KeyChain.onVerify" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> (<a class="reference internal" href="#Data" title="Data"><em>Data</em></a>) &#8211; original data packet</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="KeyChain.onVerifyError">
+<tt class="descname">onVerifyError</tt><big>(</big><em>data</em>, <em>error</em><big>)</big><a class="headerlink" href="#KeyChain.onVerifyError" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<a class="reference internal" href="#Data" title="Data"><em>Data</em></a>) &#8211; original data packet</li>
+<li><strong>error</strong> &#8211; Error message (or error code)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">nothing</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <p>Usage example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">onData</span> <span class="p">(</span><span class="n">interest</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">face</span><span class="o">.</span><span class="n">getKeyChain</span> <span class="p">()</span><span class="o">.</span><span class="n">verify</span> <span class="p">(</span><span class="n">data</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">Exception</span> <span class="p">(</span><span class="s">&quot;Data packet cannot be verified)</span>
-    <span class="k">print</span> <span class="n">data</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">onVerify</span> <span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&quot;Huraaaay! </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">data</span><span class="o">.</span><span class="n">getName</span> <span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">onData</span> <span class="p">(</span><span class="n">interest</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="n">face</span><span class="o">.</span><span class="n">getKeyChain</span> <span class="p">()</span><span class="o">.</span><span class="n">verify</span> <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">onVerify</span><span class="p">)</span>
+    <span class="c"># all non-verifiable packet will be silently dropped</span>
 </pre></div>
 </div>
 </dd></dl>
